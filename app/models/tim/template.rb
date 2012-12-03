@@ -12,8 +12,21 @@ module Tim
 
     # Used in views to display the xml elements of this template
     def xml_elements
-      ::Nokogiri::XML::Document.parse(xml).xpath("//template/*").to_xml
+      parsed_xml.xpath("//template/*").to_xml
     end
 
+    def os
+      {
+        :name    => parsed_xml.xpath("//template/os/name").text,
+        :version => parsed_xml.xpath("//template/os/version").text,
+        :arch    => parsed_xml.xpath("//template/os/arch").text
+      }
+    end
+
+    private
+
+    def parsed_xml
+      @parsed_xml ||= ::Nokogiri::XML::Document.parse(xml)
+    end
   end
 end
